@@ -29,4 +29,16 @@ public class SecurityDataController : ControllerBase
         })
         .ToArray();
     }
+
+    [HttpGet("{id}")]
+    public IEnumerable<SecurityData> Get(long id)
+    {
+        return Enumerable.Range(1, 100).Select(index => new SecurityData
+        {
+            Date = DateTime.Now.AddDays(index).ToString("dd/MM/yyyy"),
+            Price = Math.Exp(Convert.ToDouble(Random.Shared.Next(-100, 100))/100) * 100,
+            Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+        })
+        .ToArray();
+    }
 }

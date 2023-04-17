@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Bar } from "react-chartjs-2";
+import { Bar, Line } from "react-chartjs-2";
 
 
 export class Counter extends Component {
@@ -7,13 +7,14 @@ export class Counter extends Component {
   
   constructor(props) {
       super(props);
-      this.state = { currentCount: 0, forecasts: [], loading:true};
+      this.state = { currentCount: 0, forecasts: [], loading: true, timeseries: [], loadingTS: true };
     this.incrementCounter = this.incrementCounter.bind(this);
     
   }
 
   componentDidMount() {
-        this.populateSecurityData();
+      this.populateSecurityData();
+      this.populateSecurityTimeseries();
     }
   incrementCounter() {
     this.setState({
@@ -110,11 +111,59 @@ export class Counter extends Component {
           }
         }}
       />
-              </div>
+                  </div>
+              
               <div className="chart-container">
                   {contents}
+                  </div>
+
+              </div><div className="Fluid_row">
+                      <Line
+                      data={{
+                          labels: this.state.timeseries.map(series => series.date),
+
+                              datasets: [
+                                  {
+                                      label: 'Portfolio 1',
+                                      data: this.state.timeseries.map(series => series.price),
+                                      // you can set indiviual colors for each bar
+                                      backgroundColor: [
+                                          '#03254c',
+                                          '#1167b1',
+                                          '#187bcd',
+                                          '#2a9df4',
+                                          '#d0efff'
+                                      ],
+                                      borderWidth: 1,
+                                  },
+                                  {
+                                      label: 'Portfolio 2',
+                                      data: this.state.timeseries.map(series => series.price),
+                                      // you can set indiviual colors for each bar
+                                      backgroundColor: [
+                                          '#f4f4f4',
+                                          '#747774',
+                                          '#8d908e',
+                                          '#444644',
+                                          '#747774'
+                                      ],
+                                      borderWidth: 1,
+                                  }
+                              ]
+                          }}
+                          options={{
+                              plugins: {
+                                  title: {
+                                      display: true,
+                                      text: "Price evolution of the portfolio"
+                                  },
+                                  legend: {
+                                      display: false
+                                  }
+                              }
+                          }}
+                      />
               </div>
-          </div>
           </div>
     );
   }
@@ -124,5 +173,11 @@ async populateSecurityData() {
     const response = await fetch('securitydata');
     const data = await response.json();
     this.setState({ forecasts: data, loading: false });
+    }
+
+async populateSecurityTimeseries() {
+        const response = await fetch('securitydata/2');
+        const data = await response.json();
+        this.setState({ timeseries: data, loadingTS: false });
     }
 }
