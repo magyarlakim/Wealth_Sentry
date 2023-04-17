@@ -1,0 +1,28 @@
+﻿/* Provide sufficient contrast against white background */
+a {
+  color: #0366d6;
+}
+
+code {
+  color: #E01A76;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+.chart-container {
+    width: 40%;
+    margin: 10px;
+}
+.Fluid_row {
+   display: flex;
+   flex-direction: row;
+   justify-items: center;
+   align-items:center;
+}
+.frontpage_img {
+    opacity: 0.6;
+}
